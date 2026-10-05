@@ -1,0 +1,33 @@
+
+test_name: Fluxo de consulta de tarefas
+
+marks:
+  - parametrize:
+      key: todo_id
+      vals:
+        - 1
+        - 5
+        - 15
+
+stages:
+
+  - name: Buscar tarefa específica
+    request:
+      url: https://jsonplaceholder.typicode.com/todos/{todo_id}
+      method: GET
+
+    response:
+      status_code: 200
+      save:
+        json:
+          id_do_usuario: userId
+
+  - name: Buscar todas as tarefas do usuário
+    request:
+      url: https://jsonplaceholder.typicode.com/todos?userId={id_do_usuario}
+      method: GET
+
+    response:
+      status_code: 200
+      verify_response_with:
+        function: utils:validar_lista_tarefas
